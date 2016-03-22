@@ -1,4 +1,5 @@
 ﻿using ProductManager.Domain;
+using ProductMonitor.Repository;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,24 +14,27 @@ namespace ProductMonitor.Forms
 {
 	public partial class MainForm : Form
 	{
+		private MainFormViewObject viewObject = new MainFormViewObject();
+		private IVendorRepository vendorRepository = new VendorRepository();
+
 		public MainForm()
 		{
 			InitializeComponent();
 
 			vendorGrid.AutoGenerateColumns = true;
 			updatesGrid.AutoGenerateColumns = true;
-
-			LoadFakeVendors();
 		}
 
-		private void MainForm_Load(object sender, EventArgs e)
+		private async void MainForm_Load(object sender, EventArgs e)
 		{
+			await this.LoadVendorsAsync();
+
 			// setup grid data binding
 			vendorGrid.DataSource = vendorBindingSource;
 			updatesGrid.DataSource = updatesBindingSource;
 
 			// bind vendors pane to data
-			vendorBindingSource.DataSource = vo.Vendors;
+			vendorBindingSource.DataSource = viewObject.Vendors;
 			//vendorGrid.Columns["Updates"].Visible = false;
 
 			// setup relationship between panes
@@ -43,14 +47,14 @@ namespace ProductMonitor.Forms
 
 		private void TimerEventProcessor(object myObject, EventArgs e)
 		{
-			vo.Vendors.First().Updates.Insert(0, new Product()
+			viewObject.Vendors.First().Updates.Insert(0, new Product()
 			{
 				ProductId = Guid.NewGuid(),
 				VendorCode = "ADDED"
 			});
-			while (vo.Vendors.First().Updates.Count > 3)
+			while (viewObject.Vendors.First().Updates.Count > 3)
 			{
-				vo.Vendors.First().Updates.RemoveAt(3);
+				viewObject.Vendors.First().Updates.RemoveAt(3);
 			}
 		}
 
@@ -63,40 +67,10 @@ namespace ProductMonitor.Forms
 		}
 
 
-		private MainFormViewObject vo = new MainFormViewObject();
-		private void LoadFakeVendors()
+		private async Task LoadVendorsAsync()
 		{
-			vo.Vendors.Add(new VendorViewObject()
-			{
-				Code = "A",
-				Description = "Desc A",
-				Name = "Vendor A",
-				Updates = new BindingList<Product>()
-			});
-
-			vo.Vendors.Add(new VendorViewObject()
-			{
-				Code = "B",
-				Description = "Desc B",
-				Name = "Vendor B",
-				Updates = new BindingList<Product>()
-			});
-
-			vo.Vendors.Add(new VendorViewObject()
-			{
-				Code = "C",
-				Description = "Desc C",
-				Name = "Vendor C",
-				Updates = new BindingList<Product>()
-			});
-
-			vo.Vendors.Add(new VendorViewObject()
-			{
-				Code = "D",
-				Description = "Desc D",
-				Name = "Vendor D",
-				Updates = new BindingList<Product>()
-			});
+			var vendors = await this.vendorRepository.GetVendorsAsync();
+			viewObject.Vendors = new BindingList<Vendor>(vendors.ToList());
 		}
 	}
 }
