@@ -15,7 +15,11 @@ namespace ProductMonitor.Forms
 	public partial class MainForm : Form
 	{
 		private MainFormViewObject viewObject = new MainFormViewObject();
+
 		private IVendorRepository vendorRepository = new VendorRepository();
+		private IProductUpdateRepository updateRepository = new ProductUpdateRepository();
+		private IProductRepository productReposiitory = new ProductRepository();
+		private int maxUpdateCount = 50;
 
 		public MainForm()
 		{
@@ -45,17 +49,33 @@ namespace ProductMonitor.Forms
 			taskTimer.Start();
 		}
 
-		private void TimerEventProcessor(object myObject, EventArgs e)
+		private async void TimerEventProcessor(object myObject, EventArgs e)
 		{
-			viewObject.Vendors.First().Updates.Insert(0, new Product()
+			var updates = await this.updateRepository.GetPendingProductUpdatesAsync();
+			foreach(var update in updates)
 			{
-				ProductId = Guid.NewGuid(),
-				VendorCode = "ADDED"
-			});
-			while (viewObject.Vendors.First().Updates.Count > 3)
-			{
-				viewObject.Vendors.First().Updates.RemoveAt(3);
+				var product = await this.productReposiitory.GetProductAsync(update.VendorCode, update.ProductId);
+				var vendor = this.findVendorInViewObject(update.VendorCode);
+				vendor.Updates.Insert(0, product);
+
+				while(vendor.Updates.Count > maxUpdateCount)
+				{
+					vendor.Updates.RemoveAt(maxUpdateCount);
+				}
 			}
+		}
+
+		private Vendor findVendorInViewObject(String vendorCode)
+		{
+			foreach(var vendor in viewObject.Vendors)
+			{
+				if(vendor.Code.Equals(vendorCode))
+				{
+					return vendor;
+				}
+			}
+
+			return null;
 		}
 
 		private void vendorBindingSource_CurrentChanged(object sender, EventArgs e)
