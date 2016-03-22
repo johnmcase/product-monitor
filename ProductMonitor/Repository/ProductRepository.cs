@@ -10,7 +10,7 @@ namespace ProductMonitor.Repository
 {
 	public class ProductRepository : BaseRepository, IProductRepository
 	{
-		public async Task<Product> GetProductAsync(String vendorCode, String productId)
+		public async Task<Product> GetProductAsync(String vendorCode, Guid productId)
 		{
 			TableOperation op = TableOperation.Retrieve<Product>(vendorCode, String.Format("Product__{0}", productId));
 

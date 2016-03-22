@@ -9,6 +9,6 @@ namespace ProductMonitor.Repository
 {
 	interface IProductRepository
 	{
-		Task<Product> GetProductAsync(String vendorCode, String productId);
+		Task<Product> GetProductAsync(String vendorCode, Guid productId);
 	}
 }

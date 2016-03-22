@@ -9,21 +9,40 @@ namespace ProductManager.Domain
 {
 	public class Product : TableEntity
 	{
-		public Product(String VendorCode, String Id)
+		public Product(String VendorCode, Guid ProductId)
 		{
-			this.PartitionKey = VendorCode;
-			this.RowKey = Id;
-
 			this.VendorCode = VendorCode;
-			this.Id = Id;
+			this.ProductId = ProductId;
 		}
 
 		public Product() { }
 
-		public String Id { get; set; }
-		public String VendorCode { get; set; }
+		public Guid ProductId
+		{
+			get
+			{
+				return Guid.Parse(this.RowKey.Remove(0, 9));
+			}
+			set
+			{
+				this.RowKey = "Product__" + value.ToString();
+			}
+		}
+
+		public String VendorCode
+		{
+			get
+			{
+				return this.PartitionKey;
+			}
+			set
+			{
+				this.PartitionKey = value;
+			}
+		}
+			
 		public String Name { get; set; }
 		public String Description { get; set; }
-		public String Price { get; set; }
+		public Double Price { get; set; }
 	}
 }
