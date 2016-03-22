@@ -88,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Domain\Product.cs" />
+    <Compile Include="Domain\ProductUpdate.cs" />
     <Compile Include="Domain\Vendor.cs" />
     <Compile Include="Forms\MainForm.cs">
       <SubType>Form</SubType>
@@ -100,8 +101,10 @@
     <Compile Include="Repository\BaseRepository.cs" />
     <Compile Include="Repository\CloudTableExtensions.cs" />
     <Compile Include="Repository\IProductRepository.cs" />
+    <Compile Include="Repository\IProductUpdateRepository.cs" />
     <Compile Include="Repository\IVendorRepository.cs" />
     <Compile Include="Repository\ProductRepository.cs" />
+    <Compile Include="Repository\ProductUpdateRepository.cs" />
     <Compile Include="Repository\VendorRepository.cs" />
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

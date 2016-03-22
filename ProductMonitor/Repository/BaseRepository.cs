@@ -13,14 +13,16 @@ namespace ProductMonitor.Repository
 	public abstract class BaseRepository
 	{
 		protected String tableName = "VendorData";
+		protected String queueName = "productupdates";
 
-		protected CloudTable GetVendorTable() {
-			return GetCloudTableClient().GetTableReference(tableName);
+		protected CloudTable GetVendorTable()
+		{
+			return this.GetStorageAccount().CreateCloudTableClient().GetTableReference(tableName);
 		}
 
-		private CloudTableClient GetCloudTableClient()
+		protected CloudQueue GetProductUpdateQueue()
 		{
-			return this.GetStorageAccount().CreateCloudTableClient();
+			return this.GetStorageAccount().CreateCloudQueueClient().GetQueueReference(queueName);
 		}
 
 		private CloudStorageAccount GetStorageAccount()
