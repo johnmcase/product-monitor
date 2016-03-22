@@ -20,6 +20,11 @@ namespace ProductMonitor.Repository
 
 			Assert.IsNotNull(result);
 			Assert.IsTrue(result.Count() > 0);
+
+			var first = result.First();
+			Assert.IsNotNull(first.Code);
+			Assert.IsNotNull(first.Name);
+			Assert.IsNotNull(first.Description);
 		}
 	}
 }
