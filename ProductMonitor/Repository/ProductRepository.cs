@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace ProductMonitor.Repository
 {
-	class ProductRepository : BaseRepository, IProductRepository
+	public class ProductRepository : BaseRepository, IProductRepository
 	{
 		public async Task<Product> GetProductAsync(String vendorCode, String productId)
 		{
-			TableOperation op = TableOperation.Retrieve<Product>(vendorCode, String.Format("Product_{}", productId));
+			TableOperation op = TableOperation.Retrieve<Product>(vendorCode, String.Format("Product__{0}", productId));
 
 			TableResult result = await GetVendorTable().ExecuteAsync(op);
 			return (Product)result.Result;
