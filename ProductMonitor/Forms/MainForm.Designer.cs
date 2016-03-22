@@ -34,6 +34,7 @@
 			this.updatesGrid = new System.Windows.Forms.DataGridView();
 			this.vendorBindingSource = new System.Windows.Forms.BindingSource(this.components);
 			this.updatesBindingSource = new System.Windows.Forms.BindingSource(this.components);
+			this.taskTimer = new System.Windows.Forms.Timer(this.components);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
@@ -85,6 +86,10 @@
 			this.updatesGrid.Size = new System.Drawing.Size(778, 701);
 			this.updatesGrid.TabIndex = 0;
 			// 
+			// taskTimer
+			// 
+			this.taskTimer.Tick += new System.EventHandler(this.TimerEventProcessor);
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -93,6 +98,7 @@
 			this.Controls.Add(this.splitContainer1);
 			this.Name = "MainForm";
 			this.Text = "MainForm";
+			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -112,6 +118,7 @@
 		private System.Windows.Forms.DataGridView updatesGrid;
 		private System.Windows.Forms.BindingSource vendorBindingSource;
 		private System.Windows.Forms.BindingSource updatesBindingSource;
+		private System.Windows.Forms.Timer taskTimer;
 
 
 	}

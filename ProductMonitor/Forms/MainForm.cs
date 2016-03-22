@@ -18,20 +18,37 @@ namespace ProductMonitor.Forms
 			InitializeComponent();
 
 			vendorGrid.AutoGenerateColumns = true;
-
 			updatesGrid.AutoGenerateColumns = true;
 
+			LoadFakeVendors();
+		}
+
+		private void MainForm_Load(object sender, EventArgs e)
+		{
 			// setup grid data binding
 			vendorGrid.DataSource = vendorBindingSource;
 			updatesGrid.DataSource = updatesBindingSource;
 
 			// bind vendors pane to data
-			vendorBindingSource.DataSource = GetFakeVendors();
-			vendorGrid.Columns["Updates"].Visible = false;
+			vendorBindingSource.DataSource = vo.Vendors;
+			//vendorGrid.Columns["Updates"].Visible = false;
 
 			// setup relationship between panes
 			updatesBindingSource.DataSource = vendorBindingSource;
 			updatesBindingSource.DataMember = "Updates";
+
+			taskTimer.Interval = 1000; // Run the task every 1 second
+			taskTimer.Start();
+		}
+
+		private void TimerEventProcessor(object myObject, EventArgs e)
+		{
+			Console.Out.WriteLine("TIMER TASK RUNNING");
+			vo.Vendors.First().Updates.Add(new Product()
+			{
+				ProductId = Guid.NewGuid(),
+				VendorCode = "ADDED"
+			});
 		}
 
 		private void vendorBindingSource_CurrentChanged(object sender, EventArgs e)
@@ -43,39 +60,40 @@ namespace ProductMonitor.Forms
 		}
 
 
-		private IEnumerable<Vendor> GetFakeVendors()
+		private MainFormViewObject vo = new MainFormViewObject();
+		private void LoadFakeVendors()
 		{
-			var ret = new List<Vendor>();
-
-			ret.Add(new Vendor()
+			vo.Vendors.Add(new VendorViewObject()
 			{
 				Code = "A",
 				Description = "Desc A",
-				Name = "Vendor A"
+				Name = "Vendor A",
+				Updates = new BindingList<Product>()
 			});
 
-			ret.Add(new Vendor()
+			vo.Vendors.Add(new VendorViewObject()
 			{
 				Code = "B",
 				Description = "Desc B",
-				Name = "Vendor B"
+				Name = "Vendor B",
+				Updates = new BindingList<Product>()
 			});
 
-			ret.Add(new Vendor()
+			vo.Vendors.Add(new VendorViewObject()
 			{
 				Code = "C",
 				Description = "Desc C",
-				Name = "Vendor C"
+				Name = "Vendor C",
+				Updates = new BindingList<Product>()
 			});
 
-			ret.Add(new Vendor()
+			vo.Vendors.Add(new VendorViewObject()
 			{
 				Code = "D",
 				Description = "Desc D",
-				Name = "Vendor D"
+				Name = "Vendor D",
+				Updates = new BindingList<Product>()
 			});
-
-			return ret;
 		}
 	}
 }
