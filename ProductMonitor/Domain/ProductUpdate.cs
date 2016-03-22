@@ -9,6 +9,6 @@ namespace ProductMonitor.Domain
 	public class ProductUpdate
 	{
 		public String VendorCode { get; set; }
-		public String ProductId { get; set; }
+		public Guid ProductId { get; set; }
 	}
 }
