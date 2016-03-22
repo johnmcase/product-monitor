@@ -43,12 +43,15 @@ namespace ProductMonitor.Forms
 
 		private void TimerEventProcessor(object myObject, EventArgs e)
 		{
-			Console.Out.WriteLine("TIMER TASK RUNNING");
-			vo.Vendors.First().Updates.Add(new Product()
+			vo.Vendors.First().Updates.Insert(0, new Product()
 			{
 				ProductId = Guid.NewGuid(),
 				VendorCode = "ADDED"
 			});
+			while (vo.Vendors.First().Updates.Count > 3)
+			{
+				vo.Vendors.First().Updates.RemoveAt(3);
+			}
 		}
 
 		private void vendorBindingSource_CurrentChanged(object sender, EventArgs e)
