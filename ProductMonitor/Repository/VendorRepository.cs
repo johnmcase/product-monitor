@@ -3,7 +3,6 @@ using ProductManager.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ProductMonitor.Repository
@@ -14,9 +13,40 @@ namespace ProductMonitor.Repository
 
 		public async Task<IEnumerable<ProductManager.Domain.Vendor>> GetVendorsAsync()
 		{
-			TableQuery<Vendor> query = new TableQuery<Vendor>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, vendorPartition));
+			TableQuery<VendorEntity> query = new TableQuery<VendorEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, vendorPartition));
 
-			return await GetVendorTable().ExecuteQueryAsync(query);
+			var results = await GetVendorTable().ExecuteQueryAsync(query);
+			return results.Select(x => x.AsVendor());
+		}
+
+		private class VendorEntity : TableEntity
+		{
+			public VendorEntity(String Code)
+			{
+				this.PartitionKey = "Vendor";
+				this.RowKey = Code;
+
+				this.Code = Code;
+			}
+
+			public VendorEntity()
+			{
+				this.PartitionKey = "Vendor";
+			}
+
+			public String Code { get; set; }
+			public String Name { get; set; }
+			public String Description { get; set; }
+
+			public Vendor AsVendor()
+			{
+				return new Vendor()
+				{
+					Code = this.Code,
+					Name = this.Name,
+					Description = this.Description
+				};
+			}
 		}
 	}
 }
