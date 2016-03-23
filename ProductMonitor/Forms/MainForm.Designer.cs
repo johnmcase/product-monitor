@@ -97,7 +97,7 @@
 			this.ClientSize = new System.Drawing.Size(1173, 701);
 			this.Controls.Add(this.splitContainer1);
 			this.Name = "MainForm";
-			this.Text = "MainForm";
+			this.Text = "Product Monitor";
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
