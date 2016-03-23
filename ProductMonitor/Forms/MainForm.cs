@@ -1,5 +1,6 @@
 ﻿using ProductManager.Domain;
 using ProductMonitor.Repository;
+using ProductMonitor.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -16,13 +17,18 @@ namespace ProductMonitor.Forms
 	{
 		private MainFormViewObject viewObject = new MainFormViewObject();
 
-		private IVendorRepository vendorRepository = new VendorRepository();
-		private IProductUpdateRepository updateRepository = new ProductUpdateRepository();
-		private IProductRepository productReposiitory = new ProductRepository();
-		private int maxUpdateCount = 50;
+		private IProductMonitorService productMonitorService;
+		private const int maxUpdateCount = 50;
 
 		public MainForm()
 		{
+			// Poor mans IoC
+			this.productMonitorService = new ProductMonitorService(
+				new ProductUpdateRepository(),
+				new ProductRepository(),
+				new VendorRepository()
+			);
+
 			InitializeComponent();
 
 			vendorGrid.AutoGenerateColumns = true;
@@ -39,7 +45,6 @@ namespace ProductMonitor.Forms
 
 			// bind vendors pane to data
 			vendorBindingSource.DataSource = viewObject.Vendors;
-			//vendorGrid.Columns["Updates"].Visible = false;
 
 			// setup relationship between panes
 			updatesBindingSource.DataSource = vendorBindingSource;
@@ -51,31 +56,7 @@ namespace ProductMonitor.Forms
 
 		private async void TimerEventProcessor(object myObject, EventArgs e)
 		{
-			var updates = await this.updateRepository.GetPendingProductUpdatesAsync();
-			foreach(var update in updates)
-			{
-				var product = await this.productReposiitory.GetProductAsync(update.VendorCode, update.ProductId);
-				var vendor = this.findVendorInViewObject(update.VendorCode);
-				vendor.Updates.Insert(0, product);
-
-				while(vendor.Updates.Count > maxUpdateCount)
-				{
-					vendor.Updates.RemoveAt(maxUpdateCount);
-				}
-			}
-		}
-
-		private Vendor findVendorInViewObject(String vendorCode)
-		{
-			foreach(var vendor in viewObject.Vendors)
-			{
-				if(vendor.Code.Equals(vendorCode))
-				{
-					return vendor;
-				}
-			}
-
-			return null;
+			await this.productMonitorService.AddUpdatedProductsAsync(this.viewObject.Vendors, maxUpdateCount);
 		}
 
 		private void vendorBindingSource_CurrentChanged(object sender, EventArgs e)
@@ -86,10 +67,9 @@ namespace ProductMonitor.Forms
 		{
 		}
 
-
 		private async Task LoadVendorsAsync()
 		{
-			var vendors = await this.vendorRepository.GetVendorsAsync();
+			var vendors = await this.productMonitorService.GetVendorsAsync();
 			viewObject.Vendors = new BindingList<Vendor>(vendors.ToList());
 		}
 	}

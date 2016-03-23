@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ProductMonitor.Repository
 {
-	interface IProductRepository
+	public interface IProductRepository
 	{
 		Task<Product> GetProductAsync(String vendorCode, Guid productId);
 	}

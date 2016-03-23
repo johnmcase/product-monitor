@@ -107,6 +107,8 @@
     <Compile Include="Repository\ProductRepository.cs" />
     <Compile Include="Repository\ProductUpdateRepository.cs" />
     <Compile Include="Repository\VendorRepository.cs" />
+    <Compile Include="Service\IProductMonitorService.cs" />
+    <Compile Include="Service\ProductMonitorService.cs" />
     <EmbeddedResource Include="Forms\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -9,7 +9,7 @@ namespace ProductMonitor.Repository
 {
 	public class VendorRepository : BaseRepository, IVendorRepository
 	{
-		private String vendorPartition = "Vendor";
+		private const String vendorPartition = "Vendor";
 
 		public async Task<IEnumerable<ProductManager.Domain.Vendor>> GetVendorsAsync()
 		{
@@ -23,7 +23,7 @@ namespace ProductMonitor.Repository
 		{
 			public VendorEntity(String Code)
 			{
-				this.PartitionKey = "Vendor";
+				this.PartitionKey = vendorPartition;
 				this.RowKey = Code;
 
 				this.Code = Code;
@@ -31,7 +31,7 @@ namespace ProductMonitor.Repository
 
 			public VendorEntity()
 			{
-				this.PartitionKey = "Vendor";
+				this.PartitionKey = vendorPartition;
 			}
 
 			public String Code { get; set; }
