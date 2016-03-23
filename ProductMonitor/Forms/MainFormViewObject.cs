@@ -1,4 +1,4 @@
-﻿using ProductManager.Domain;
+﻿using ProductMonitor.Domain;
 using System.ComponentModel;
 
 namespace ProductMonitor.Forms

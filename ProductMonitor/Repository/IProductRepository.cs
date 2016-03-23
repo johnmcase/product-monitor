@@ -1,4 +1,4 @@
-﻿using ProductManager.Domain;
+﻿using ProductMonitor.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ProductManager.Domain
+namespace ProductMonitor.Domain
 {
 	public class Product
 	{

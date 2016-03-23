@@ -1,4 +1,4 @@
-﻿using ProductManager.Domain;
+﻿using ProductMonitor.Domain;
 using ProductMonitor.Repository;
 using ProductMonitor.Service;
 using System;

@@ -1,5 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using ProductManager.Domain;
+using ProductMonitor.Domain;
 using System;
 using System.Threading.Tasks;
 

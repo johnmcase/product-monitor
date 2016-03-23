@@ -1,5 +1,5 @@
 ﻿using Microsoft.WindowsAzure.Storage.Table;
-using ProductManager.Domain;
+using ProductMonitor.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace ProductMonitor.Repository
 	{
 		private const String vendorPartition = "Vendor";
 
-		public async Task<IEnumerable<ProductManager.Domain.Vendor>> GetVendorsAsync()
+		public async Task<IEnumerable<ProductMonitor.Domain.Vendor>> GetVendorsAsync()
 		{
 			TableQuery<VendorEntity> query = new TableQuery<VendorEntity>().Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, vendorPartition));
 

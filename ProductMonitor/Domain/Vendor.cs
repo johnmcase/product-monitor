@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 
-namespace ProductManager.Domain
+namespace ProductMonitor.Domain
 {
 	public class Vendor
 	{
